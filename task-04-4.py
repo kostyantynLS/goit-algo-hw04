@@ -10,6 +10,7 @@
 '''
 import datetime
 
+
 def say_hello():
     return "How can I help you?"
 def parse_input(cmd_line:str):
@@ -47,13 +48,13 @@ def del_contact(args, contacts) -> str:
     else:
         return "contact not found"
 
-def print_contact(contacts):
+def print_contact(contacts) -> list:
+    items = list()
     if len(contacts)>0:
-        for names,phones in contacts.items():
-            print(f'{names}: {phones}')
-        return "Ok"
-    else:
-        return "contacts book empty"
+        for names, phones in contacts.items():
+            items.append(f'{names},{phones}')
+    return items
+
 
 def get_phone(name, contacts):
     s = contacts.get(name)
@@ -78,7 +79,8 @@ def main():
 
     print(CLI_header)
     print(say_hello())
-    contacts ={}
+    contacts = dict()
+
     while True:
         text = input('Type here your command: ')
         cmds = parse_input(text)
@@ -110,7 +112,9 @@ def main():
         elif cmds[0]=='phone':
             print(get_phone(cmds[1], contacts))
         elif cmds[0]=='all':
-            print(print_contact(contacts))
+            contacts = print_contact(contacts)
+            for i in contacts:
+                print(i)
         elif cmds[0]=='date':
             print(curr_date())
         elif cmds[0]=='time':
