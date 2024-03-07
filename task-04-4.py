@@ -10,56 +10,55 @@
 '''
 import datetime
 
-
 def say_hello():
     return "How can I help you?"
+
 def parse_input(cmd_line:str):
     info = cmd_line.split(" ")
     info[0] = info[0].strip(" ").lower()
     return info
 
-def add_contact(args, contacts) -> str:
+def add_contact(args, cont) -> str:
     if len(args)<2:
         return "not enought information to add"
     name, phone = args
-    if not name in contacts:
-        contacts[name] = phone
+    if not name in cont:
+        cont[name] = phone
         return "contact added"
     else:
         return "contact already exists"
 
-def change_contact(args, contacts) -> str:
+def change_contact(args, cont) -> str:
     if len(args)<2:
         return "not enought information to change"
     name, phone = args
-    if name in contacts:
-        contacts[name] = phone
+    if name in cont:
+        cont[name] = phone
         return "contact updated"
     else:
         return "contact not found"
 
-def del_contact(args, contacts) -> str:
+def del_contact(args, cont) -> str:
     if len(args)<1:
         return "need name to delete"
     name = args[0]
-    if name in contacts:
-        del contacts[name]
+    if name in cont:
+        del cont[name]
         return "contact deleted"
     else:
         return "contact not found"
 
-def print_contact(contacts) -> list:
+def print_contact(cont):
     items = list()
-    if len(contacts)>0:
-        for names, phones in contacts.items():
+    if len(cont)>0:
+        for names, phones in cont.items():
             items.append(f'{names},{phones}')
     return items
 
-
-def get_phone(name, contacts):
-    s = contacts.get(name)
+def get_phone(name, cont):
+    s = cont.get(name)
     if s!=None:
-        print(contacts[name])
+        print(cont[name])
         return 'successfully founded'
     else:
         return 'not found'
@@ -73,14 +72,15 @@ def curr_time():
     return dt.strftime("%H:%M:%S")
 
 def main():
+
+    contacts = dict()
+
     CLI_header = '****************************************\n'\
                  '**         Command line assistant     **\n'\
                  '****************************************\n'
 
     print(CLI_header)
     print(say_hello())
-    contacts = dict()
-
     while True:
         text = input('Type here your command: ')
         cmds = parse_input(text)
@@ -112,9 +112,9 @@ def main():
         elif cmds[0]=='phone':
             print(get_phone(cmds[1], contacts))
         elif cmds[0]=='all':
-            contacts = print_contact(contacts)
-            for i in contacts:
-                print(i)
+            us_list = print_contact(contacts)
+            for i in us_list:
+                print(' item: ', i)
         elif cmds[0]=='date':
             print(curr_date())
         elif cmds[0]=='time':
